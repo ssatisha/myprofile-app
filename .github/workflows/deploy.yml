@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - master
 
 jobs:
   build-and-deploy:
@@ -40,8 +39,6 @@ jobs:
           push: true
           tags: |
             myprofileacr2026.azurecr.io/profile-app:latest
-            myprofileacr2026.azurecr.io/profile-app:v${{ steps.semver.outputs.version }}
-            myprofileacr2026.azurecr.io/profile-app:${{ github.sha }}
 
       - name: Azure Login
         uses: azure/login@v2
