@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${post.title}">Blog Post</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+    <main class="max-w-3xl mx-auto py-12 px-6">
+        <a href="/" class="text-sm text-blue-600 font-semibold hover:underline mb-6 inline-block">← Back to Profile</a>
+        
+        <article class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm space-y-6">
+            <span class="text-xs text-slate-500" th:text="${post.date}">Date</span>
+            <h1 class="text-3xl font-extrabold text-slate-900" th:text="${post.title}">Post Title</h1>
+            
+            <div class="prose max-w-none text-slate-700 leading-relaxed" th:text="${post.content}">
+                Post content goes here...
+            </div>
+        </article>
+    </main>
+
+</body>
+</html>
