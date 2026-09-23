@@ -61,5 +61,6 @@ jobs:
             --registry-username ${{ secrets.ACR_USERNAME }} \
             --registry-password ${{ secrets.ACR_PASSWORD }} \
             --dns-name-label my-java-profile-sati \
-            --ports 8080 \
+            --ports 80 \
+            --environment-variables SERVER_PORT=80 \
             --ip-address Public
