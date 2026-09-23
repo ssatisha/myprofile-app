@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Developer Profile</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+        h1 { margin-bottom: 5px; color: #333; }
+        p.subtitle { color: #0078d4; font-weight: 600; margin-top: 0; margin-bottom: 25px; }
+        .links { list-style: none; padding: 0; margin: 25px 0 0 0; }
+        .links li { margin: 12px 0; }
+        .links a {
+            display: block;
+            padding: 12px;
+            background: #0078d4;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .links a:hover { background: #005a9e; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Satisha Suryanarayana</h1>
+        <p class="subtitle">Software Developer | Cloud Specialist</p>
+        <p>Welcome to my profile web application, containerized with Docker and deployed on Azure!</p>
+        
+        <ul class="links">
+            <li><a href="https://github.com/ssatisha" target="_blank">GitHub Profile</a></li>
+            <li><a href="https://linkedin.com/in/satishas" target="_blank">LinkedIn Profile</a></li>
+            <li><a href="https://yourwebsite.com" target="_blank">Portfolio / Resources</a></li>
+        </ul>
+    </div>
+</body>
+</html>
