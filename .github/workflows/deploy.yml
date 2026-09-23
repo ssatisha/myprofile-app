@@ -58,7 +58,7 @@ jobs:
           az container create \
             --resource-group profile-app-rg \
             --name my-java-profile-instance \
-            --image myprofileacr2026.azurecr.io/profile-app:${{ github.sha }} \
+            --image myprofileacr2026.azurecr.io/profile-app:latest \
             --os-type Linux \
             --cpu 1 \
             --memory 1.5 \
