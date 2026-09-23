@@ -34,7 +34,7 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build and Push Docker Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
@@ -48,12 +48,20 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy to Azure Container Instance
+      - name: Remove Existing Azure Container Instance
+        run: |
+          az container delete \
+            --resource-group profile-app-rg \
+            --name my-java-profile-instance \
+            --yes \
+            || true
+
+      - name: Deploy Commit Version to Azure Container Instance
         run: |
           az container create \
             --resource-group profile-app-rg \
             --name my-java-profile-instance \
-            --image myprofileacr2026.azurecr.io/profile-app:v${{ steps.semver.outputs.version }} \
+            --image myprofileacr2026.azurecr.io/profile-app:${{ github.sha }} \
             --os-type Linux \
             --cpu 1 \
             --memory 1.5 \
