@@ -39,6 +39,7 @@ jobs:
           push: true
           tags: |
             myprofileacr2026.azurecr.io/profile-app:latest
+            myprofileacr2026.azurecr.io/profile-app:${{ github.sha }}
 
       - name: Azure Login
         uses: azure/login@v2
@@ -58,7 +59,7 @@ jobs:
           az container create \
             --resource-group profile-app-rg \
             --name my-java-profile-instance \
-            --image myprofileacr2026.azurecr.io/profile-app:latest \
+            --image myprofileacr2026.azurecr.io/profile-app:${{ github.sha }} \
             --os-type Linux \
             --cpu 1 \
             --memory 1.5 \
