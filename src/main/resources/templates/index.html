@@ -3,54 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Developer Profile</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 450px;
-            width: 90%;
-            text-align: center;
-        }
-        h1 { margin-bottom: 5px; color: #333; }
-        p.subtitle { color: #0078d4; font-weight: 600; margin-top: 0; margin-bottom: 25px; }
-        .links { list-style: none; padding: 0; margin: 25px 0 0 0; }
-        .links li { margin: 12px 0; }
-        .links a {
-            display: block;
-            padding: 12px;
-            background: #0078d4;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-        .links a:hover { background: #005a9e; }
-    </style>
+    <title>Profile - Satisha Suryanarayana</title>
+    <!-- Tailwind CSS for rapid modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="card">
-        <h1>Satisha Suryanarayana</h1>
-        <p class="subtitle">Software Developer | Cloud Specialist</p>
-        <p>Welcome to my profile web application, containerized with Docker and deployed on Azure!</p>
-        
-        <ul class="links">
-            <li><a href="https://github.com/ssatisha" target="_blank">GitHub Profile</a></li>
-            <li><a href="https://linkedin.com/in/satishas" target="_blank">LinkedIn Profile</a></li>
-            <li><a href="https://yourwebsite.com" target="_blank">Portfolio / Resources</a></li>
-        </ul>
-    </div>
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+    <main class="max-w-4xl mx-auto py-12 px-6 space-y-12">
+
+        <!-- HERO / HEADER -->
+        <header class="text-center md:text-left border-b pb-8">
+            <h1 class="text-4xl font-extrabold text-slate-900" th:text="${name}">Satisha Suryanarayana</h1>
+            <p class="text-lg text-blue-600 font-medium mt-1" th:text="${title}">AzureDevOps|SRE|Automation</p>
+            <p class="text-slate-600 mt-3 max-w-2xl">
+                Welcome to my personal profile application hosted on Azure Container Instances.
+            </p>
+        </header>
+
+        <!-- EDUCATION & CERTIFICATIONS -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-blue-600 pb-2 mb-6">Education & Certifications</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                
+                <!-- Education Card -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-blue-600">Education</span>
+                    <h3 class="text-lg font-bold text-slate-900 mt-1">B.E in Electronics & Communication Engineering</h3>
+                    <p class="text-sm text-slate-500">SJCE Mysore • 2001 – 2004</p>
+                    <p class="text-xs text-slate-600 mt-3">GitHubCoPilot Certified, AWS Solution Architect, cisco certified network associate Java Microservices, Data Structures & Algorithms.</p>
+                </div>
+        <!-- BLOG SECTION -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-blue-600 pb-2 mb-6">Latest Articles</h2>
+            <div class="space-y-4">
+                <div th:each="post : ${posts}" class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex justify-between items-center text-xs text-slate-500 mb-1">
+                        <span th:text="${post.date}">Date</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 hover:text-blue-600">
+                        <a th:href="@{'/blog/' + ${post.id}}" th:text="${post.title}">Post Title</a>
+                    </h3>
+                    <p class="text-slate-600 text-sm mt-2" th:text="${post.summary}">Post Summary</p>
+                    <a th:href="@{'/blog/' + ${post.id}}" class="inline-block text-sm text-blue-600 font-semibold mt-3 hover:underline">
+                        Read Article →
+                    </a>
+                </div>
+            </div>
+        </section>
+                <!-- Certifications Card -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-blue-600">Certifications</span>
+                    <ul class="mt-3 space-y-3 text-sm">
+                        <li class="flex justify-between items-center border-b border-slate-100 pb-2">
+                            <span class="font-medium text-slate-800">Oracle Certified Professional (Java)</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-600">Verified</span>
+                        </li>
+                        <li class="flex justify-between items-center border-b border-slate-100 pb-2">
+                            <span class="font-medium text-slate-800">Microsoft Certified: Azure Developer</span>
+                            <span class="text-xs bg-slate-100 px-2 py-1 rounded text-slate-600">AZ-204</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- HOBBIES & TRAVEL -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-blue-600 pb-2 mb-4">Hobbies & Travel</h2>
+            <p class="text-slate-600 mb-4">Outside of writing code and building cloud deployments, here is what keeps me busy:</p>
+            
+            <!-- Hobbies List dynamic from Spring Controller -->
+            <div class="flex flex-wrap gap-2 mb-8">
+                <span th:each="hobby : ${hobbies}" 
+                      th:text="${hobby}" 
+                      class="bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1.5 rounded-lg text-sm font-medium">
+                    Hobby
+                </span>
+            </div>
+        </section>
+
+        <!-- PICTURE / TRAVEL GALLERY -->
+        <section>
+            <h2 class="text-2xl font-bold text-slate-900 border-b-2 border-blue-600 pb-2 mb-6">Travel Gallery</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                
+                <!-- Gallery Image Item 1 -->
+                <div class="relative group overflow-hidden rounded-xl bg-slate-200 aspect-video shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80" alt="Travel Location" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-90 p-3 flex items-end">
+                        <span class="text-white text-xs font-semibold">📍 Tokyo, Japan</span>
+                    </div>
+                </div>
+
+                <!-- Gallery Image Item 2 -->
+                <div class="relative group overflow-hidden rounded-xl bg-slate-200 aspect-video shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=600&q=80" alt="Travel Location" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-90 p-3 flex items-end">
+                        <span class="text-white text-xs font-semibold">📍 Swiss Alps</span>
+                    </div>
+                </div>
+
+                <!-- Gallery Image Item 3 -->
+                <div class="relative group overflow-hidden rounded-xl bg-slate-200 aspect-video shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=600&q=80" alt="Travel Location" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-90 p-3 flex items-end">
+                        <span class="text-white text-xs font-semibold">📍 Road Trip</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
 </body>
 </html>
