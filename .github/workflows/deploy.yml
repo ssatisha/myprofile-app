@@ -5,8 +5,6 @@ on:
     branches:
       - main
       - master
-    tags:
-      - 'v*.*.*'
 
 jobs:
   build-and-deploy:
@@ -15,16 +13,18 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
-      - name: Docker Metadata Action
-        id: meta
-        uses: docker/metadata-action@v5
         with:
-          images: myprofileacr2026.azurecr.io/profile-app
-          tags: |
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
-            type=sha,format=short
-            type=semver,pattern={{version}}
+          fetch-depth: 0
+
+      - name: Calculate Incremental Version
+        id: semver
+        uses: paulhatch/semantic-version@v5.4.0
+        with:
+          branch: main
+          tag_prefix: "v"
+          major_pattern: "(MAJOR)"
+          minor_pattern: "(MINOR)"
+          version_format: "${major}.${minor}.${patch}"
 
       - name: Log in to Azure Container Registry
         uses: docker/login-action@v3
@@ -38,5 +38,28 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: |
+            myprofileacr2026.azurecr.io/profile-app:latest
+            myprofileacr2026.azurecr.io/profile-app:v${{ steps.semver.outputs.version }}
+            myprofileacr2026.azurecr.io/profile-app:${{ github.sha }}
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Container Instance
+        run: |
+          az container create \
+            --resource-group profile-app-rg \
+            --name my-java-profile-instance \
+            --image myprofileacr2026.azurecr.io/profile-app:v${{ steps.semver.outputs.version }} \
+            --os-type Linux \
+            --cpu 1 \
+            --memory 1.5 \
+            --registry-login-server myprofileacr2026.azurecr.io \
+            --registry-username ${{ secrets.ACR_USERNAME }} \
+            --registry-password ${{ secrets.ACR_PASSWORD }} \
+            --dns-name-label my-java-profile-sati \
+            --ports 8080 \
+            --ip-address Public
