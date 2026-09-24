@@ -35,9 +35,9 @@ public class HomeController {
         model.addAttribute("hobbies", List.of("✈️ Global Travel", "📸 Photography", "☕ Specialty Coffee", "📚 Tech Reading"));
         model.addAttribute("posts", posts);
         
-        // Pass scanned files list to Thymeleaf model (prevents NullPointerException / 500 error)
+        // Pass scanned files (returns empty list instead of null if no files found)
         List<String> resumeFiles = getResumeFileList();
-        model.addAttribute("resumes", resumeFiles);
+        model.addAttribute("resumes", resumeFiles != null ? resumeFiles : new ArrayList<String>());
         
         return "index";
     }
@@ -45,7 +45,7 @@ public class HomeController {
     private List<String> getResumeFileList() {
         List<String> fileNames = new ArrayList<>();
 
-        // 1. Direct file system check for local development
+        // 1. Direct file system scan for local IDE run
         File dir = new File("src/main/resources/static/files");
         if (dir.exists() && dir.isDirectory()) {
             File[] files = dir.listFiles();
@@ -58,7 +58,7 @@ public class HomeController {
             }
         }
 
-        // 2. Classpath scanner fallback for compiled JAR / Docker deployments
+        // 2. Spring Classpath pattern fallback for compiled JAR/Container execution
         if (fileNames.isEmpty()) {
             try {
                 PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
