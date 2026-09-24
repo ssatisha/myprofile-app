@@ -1,19 +1,20 @@
 package com.example.profile;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
 
-    // Sample blog post data
     private final List<BlogPost> posts = List.of(
         new BlogPost("deploying-spring-boot-azure", 
             "Deploying Spring Boot to Azure Container Instances", 
@@ -29,17 +30,50 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("name", "Sati");
-        model.addAttribute("title", "Java & Cloud Developer");
+        model.addAttribute("name", "Satisha Suryanarayana");
+        model.addAttribute("title", "AzureDevOps | SRE | Automation | Observability");
         model.addAttribute("hobbies", List.of("✈️ Global Travel", "📸 Photography", "☕ Specialty Coffee", "📚 Tech Reading"));
-        
-        // Pass blog posts to home page
         model.addAttribute("posts", posts);
+        
+        // Pass scanned files list to Thymeleaf model (prevents NullPointerException / 500 error)
+        List<String> resumeFiles = getResumeFileList();
+        model.addAttribute("resumes", resumeFiles);
         
         return "index";
     }
 
-    // Endpoint for individual blog posts
+    private List<String> getResumeFileList() {
+        List<String> fileNames = new ArrayList<>();
+
+        // 1. Direct file system check for local development
+        File dir = new File("src/main/resources/static/files");
+        if (dir.exists() && dir.isDirectory()) {
+            File[] files = dir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile() && !file.getName().startsWith(".")) {
+                        fileNames.add(file.getName());
+                    }
+                }
+            }
+        }
+
+        // 2. Classpath scanner fallback for compiled JAR / Docker deployments
+        if (fileNames.isEmpty()) {
+            try {
+                PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+                Resource[] resources = resolver.getResources("classpath*:static/files/*");
+                for (Resource resource : resources) {
+                    if (resource.getFilename() != null && !resource.getFilename().isEmpty()) {
+                        fileNames.add(resource.getFilename());
+                    }
+                }
+            } catch (IOException ignored) {}
+        }
+
+        return fileNames;
+    }
+
     @GetMapping("/blog/{id}")
     public String blogPost(@PathVariable String id, Model model) {
         BlogPost post = posts.stream()
@@ -52,6 +86,6 @@ public class HomeController {
         }
 
         model.addAttribute("post", post);
-        return "post"; // Renders post.html
+        return "post";
     }
 }
